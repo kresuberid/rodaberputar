@@ -6,6 +6,7 @@ import WinnerModal from './components/WinnerModal';
 import { WheelEntry, AppSettings, WinnerHistory, LanguageCode, ThemeConfig } from './types';
 import { TRANSLATIONS, THEMES } from './constants';
 import { audioService } from './services/audioService';
+import { Analytics } from '@vercel/analytics/react';
 
 type Tab = 'entries' | 'settings' | 'history' | 'info';
 
@@ -56,7 +57,6 @@ const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
   const [isFullScreen, setIsFullScreen] = useState(false);
   
-  const [isGoButtonHovered, setIsGoButtonHovered] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false); // Track user gesture
   
@@ -602,7 +602,6 @@ const App = () => {
                       onTick={(speed) => settings.enableSound && audioService.playTick(speed)}
                       isSpinning={isSpinning}
                       setIsSpinning={setIsSpinning}
-                      isHovered={isGoButtonHovered}
                   />
               </div>
 
@@ -610,8 +609,6 @@ const App = () => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-[18%] h-[18%]">
                   <button 
                       onClick={handleSpin}
-                      onMouseEnter={() => setIsGoButtonHovered(true)}
-                      onMouseLeave={() => setIsGoButtonHovered(false)}
                       disabled={isSpinning || items.length === 0}
                       className={`
                           w-full h-full rounded-full 
@@ -670,6 +667,9 @@ const App = () => {
             theme={modalTheme} 
         />
       )}
+      
+      {/* Vercel Web Analytics */}
+      <Analytics />
       
       <style>{`
         @keyframes spin-slow {
