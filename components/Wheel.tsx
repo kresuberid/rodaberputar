@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { WheelEntry, ThemeConfig } from '../types';
 
 interface WheelProps {
@@ -10,7 +10,6 @@ interface WheelProps {
   onTick: (speedFactor: number) => void;
   isSpinning: boolean;
   setIsSpinning: (state: boolean) => void;
-  isHovered: boolean; 
 }
 
 export interface WheelRef {
@@ -24,8 +23,7 @@ const Wheel = forwardRef<WheelRef, WheelProps>(({
   onSpinEnd, 
   onTick,
   isSpinning,
-  setIsSpinning,
-  isHovered
+  setIsSpinning
 }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +45,6 @@ const Wheel = forwardRef<WheelRef, WheelProps>(({
   const DPI = typeof window !== 'undefined' ? window.devicePixelRatio || 2 : 2;
 
   // Helpers
-  const normalizeAngle = (angle: number) => angle % (2 * Math.PI);
   
   const getSecureRandomFraction = () => {
     const array = new Uint32Array(1);
@@ -103,7 +100,7 @@ const Wheel = forwardRef<WheelRef, WheelProps>(({
           if (items.length > 200) separatorWidth = 0.5 * DPI;
           if (items.length > 1000) separatorWidth = 0.2 * DPI;
 
-          items.forEach((item, index) => {
+          items.forEach((_, index) => {
             const startAngle = (index * arcSize); 
             const endAngle = startAngle + arcSize;
             
