@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import Wheel, { WheelRef } from './components/Wheel';
 import InputPanel from './components/InputPanel';
 import WinnerModal from './components/WinnerModal';
@@ -214,7 +213,7 @@ const App = () => {
   };
 
   // --- Sidebar Content ---
-  const SidebarContent = () => (
+  const sidebarContent = (
     <div className="flex flex-col h-full bg-transparent text-white pt-24 md:pt-28 relative">
         <div className="px-5 pb-2 flex-none">
             <div className="flex p-1 rounded-xl bg-black/20 border border-white/5">
@@ -247,7 +246,7 @@ const App = () => {
 
         <div className="flex-grow overflow-hidden relative px-5 pb-5 mt-1 mb-0">
             {activeTab === 'entries' && (
-                <InputPanel entries={items} onEntriesChange={setItems} t={t} theme={currentTheme} />
+                <InputPanel entries={items} onEntriesChange={setItems} t={t} theme={currentTheme} isSpinning={isSpinning} />
             )}
             {activeTab === 'settings' && (
                 <div className="space-y-6 p-1 overflow-y-auto h-full custom-scrollbar pr-2 pb-24">
@@ -569,7 +568,7 @@ const App = () => {
           }}
       >
           <div className="w-full h-full relative">
-             <SidebarContent />
+             {sidebarContent}
           </div>
       </aside>
 
@@ -658,13 +657,19 @@ const App = () => {
       {showWinnerModal && (
         <WinnerModal 
             winner={currentWinner}
-            onClose={() => setShowWinnerModal(false)}
+            onClose={() => {
+                setShowWinnerModal(false);
+                if (settings.removeWinner && currentWinner) {
+                    setItems(prev => prev.filter(i => i.id !== currentWinner.id));
+                }
+            }}
             onRemove={() => {
                 handleRemoveWinner();
                 setShowWinnerModal(false);
             }}
             t={t}
             theme={modalTheme} 
+            autoRemoved={settings.removeWinner}
         />
       )}
       
@@ -677,9 +682,6 @@ const App = () => {
             animation: spin-slow 8s linear infinite;
         }
       `}</style>
-
-      {/* Vercel Speed Insights */}
-      <SpeedInsights />
     </div>
   );
 };

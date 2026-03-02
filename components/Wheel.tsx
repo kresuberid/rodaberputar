@@ -45,7 +45,6 @@ const Wheel = forwardRef<WheelRef, WheelProps>(({
   const DPI = typeof window !== 'undefined' ? window.devicePixelRatio || 2 : 2;
 
   // Helpers
-  
   const getSecureRandomFraction = () => {
     const array = new Uint32Array(1);
     window.crypto.getRandomValues(array);

@@ -7,9 +7,41 @@ interface InputPanelProps {
   onEntriesChange: (entries: WheelEntry[]) => void;
   t: Translation;
   theme: ThemeConfig;
+  isSpinning: boolean;
 }
 
-const InputPanel: React.FC<InputPanelProps> = ({ entries, onEntriesChange, t, theme }) => {
+interface ActionButtonProps {
+  onClick: () => void;
+  icon: string;
+  label: string;
+  theme: ThemeConfig;
+  disabled?: boolean;
+}
+
+const ActionButton: React.FC<ActionButtonProps> = ({ onClick, icon, label, theme, disabled }) => (
+  <button 
+      onClick={onClick} 
+      disabled={disabled}
+      className={`
+          group relative flex items-center justify-center 
+          w-full h-12 rounded-xl overflow-hidden
+          transition-all duration-300 ease-out
+          shadow-lg ${disabled ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}
+      `}
+      style={{ backgroundColor: theme.accent }}
+      title={label}
+  >
+      <div className="flex items-center gap-2 relative z-10 group-hover:-translate-y-0.5 transition-transform duration-300">
+           <i className={`fi ${icon} text-base drop-shadow-sm`} style={{ color: theme.buttonText }}></i>
+           <span className="text-[10px] font-bold uppercase tracking-widest pt-0.5" style={{ color: theme.buttonText }}>
+              {label}
+           </span>
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+  </button>
+);
+
+const InputPanel: React.FC<InputPanelProps> = ({ entries, onEntriesChange, t, theme, isSpinning }) => {
   // Initialize state once based on props
   const [textInput, setTextInput] = useState(() => entries.map(e => e.text).join('\n'));
   
@@ -89,29 +121,6 @@ const InputPanel: React.FC<InputPanelProps> = ({ entries, onEntriesChange, t, th
   const placeholderColor = 'rgba(255,255,255,0.4)';
   const editModeColor = 'rgba(255,255,255,0.6)';
 
-  // Action Button - Horizontal Layout
-  const ActionButton = ({ onClick, icon, label }: { onClick: () => void, icon: string, label: string }) => (
-    <button 
-        onClick={onClick} 
-        className={`
-            group relative flex items-center justify-center 
-            w-full h-12 rounded-xl overflow-hidden
-            transition-all duration-300 ease-out
-            shadow-lg active:scale-95
-        `}
-        style={{ backgroundColor: theme.accent }}
-        title={label}
-    >
-        <div className="flex items-center gap-2 relative z-10 group-hover:-translate-y-0.5 transition-transform duration-300">
-             <i className={`fi ${icon} text-base drop-shadow-sm`} style={{ color: theme.buttonText }}></i>
-             <span className="text-[10px] font-bold uppercase tracking-widest pt-0.5" style={{ color: theme.buttonText }}>
-                {label}
-             </span>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-    </button>
-  );
-
   return (
     <div className="flex flex-col h-full gap-4 text-white">
         {/* Grid Toolbar - 2 Columns */}
@@ -120,11 +129,15 @@ const InputPanel: React.FC<InputPanelProps> = ({ entries, onEntriesChange, t, th
                 onClick={shuffle} 
                 icon="fi-rr-shuffle" 
                 label={t.buttons.shuffle} 
+                theme={theme}
+                disabled={isSpinning}
              />
              <ActionButton 
                 onClick={sort} 
                 icon="fi-rr-sort-alpha-down" 
                 label={t.buttons.sort} 
+                theme={theme}
+                disabled={isSpinning}
              />
         </div>
 
@@ -142,6 +155,7 @@ const InputPanel: React.FC<InputPanelProps> = ({ entries, onEntriesChange, t, th
                 placeholder={t.inputPlaceholder}
                 value={textInput}
                 onChange={handleTextChange}
+                disabled={isSpinning}
                 spellCheck={false}
                 autoComplete="off"
                 autoCorrect="off"

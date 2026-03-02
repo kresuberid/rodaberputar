@@ -11,7 +11,7 @@
       <img src="https://img.shields.io/badge/Versi-1.2.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Version 1.2.0">
     </a>
     <a href="https://react.dev">
-      <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19">
+      <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18">
     </a>
     <a href="https://tailwindcss.com">
       <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
@@ -81,10 +81,11 @@ Mendukung 12 Bahasa Global dengan deteksi otomatis:
 
 ## 🛠️ Tech Stack & Arsitektur
 
-Aplikasi ini dibangun menggunakan standar web modern tanpa proses build yang rumit (No-Build step required for basic usage), memanfaatkan **ES Modules** via CDN.
+Aplikasi ini dibangun menggunakan standar web modern (Vite) untuk performa dan skalabilitas tinggi.
 
-*   **Core:** React 19 (via ESM.sh)
-*   **Styling:** Tailwind CSS (CDN Runtime dengan Custom Config)
+*   **Core:** React 18 & TypeScript
+*   **Build Tool:** Vite
+*   **Styling:** Tailwind CSS
 *   **Graphics:** HTML5 Canvas API (untuk Roda & Confetti)
 *   **Audio:** Web Audio API (Oscillator & Gain Nodes)
 *   **Icons:** Flaticon UIcons (Regular Rounded)
@@ -94,7 +95,7 @@ Aplikasi ini dibangun menggunakan standar web modern tanpa proses build yang rum
 
 ## 🚀 Instalasi & Pengembangan
 
-Karena proyek ini menggunakan arsitektur modern berbasis browser (ESM), Anda dapat menjalankannya dengan mudah.
+Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) di komputer Anda.
 
 ### Cara Menjalankan (Lokal)
 
@@ -104,21 +105,24 @@ Karena proyek ini menggunakan arsitektur modern berbasis browser (ESM), Anda dap
     cd roda-berputar
     ```
 
-2.  **Jalankan Live Server**
-    Anda hanya perlu menyajikan folder ini menggunakan static server apa saja (VS Code Live Server, Python SimpleHTTPServer, atau Node http-server).
-    
-    *Menggunakan Python:*
+2.  **Instal Dependensi**
     ```bash
-    python3 -m http.server 3000
+    npm install
     ```
     
-    *Menggunakan Node:*
+3.  **Jalankan Mode Pengembangan**
     ```bash
-    npx serve .
+    npm run dev
     ```
 
-3.  **Buka Browser**
-    Akses `http://localhost:3000`
+4.  **Buka Browser**
+    Akses URL yang muncul di terminal (biasanya `http://localhost:5173`)
+
+### Build untuk Produksi
+Untuk membuat versi produksi yang optimal:
+```bash
+npm run build
+```
 
 ---
 

@@ -10,9 +10,10 @@ interface WinnerModalProps {
   onRemove: () => void;
   t: Translation;
   theme: ThemeConfig;
+  autoRemoved: boolean;
 }
 
-const WinnerModal: React.FC<WinnerModalProps> = ({ winner, onClose, onRemove, t, theme }) => {
+const WinnerModal: React.FC<WinnerModalProps> = ({ winner, onClose, onRemove, t, theme, autoRemoved }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -121,27 +122,28 @@ const WinnerModal: React.FC<WinnerModalProps> = ({ winner, onClose, onRemove, t,
             {/* Action Buttons - Theme Coordinated */}
             <div className="flex flex-col gap-3 w-full px-4">
                 
-                {/* Remove Button - Uses Accent Color */}
-                <button 
-                    onClick={() => {
-                        onRemove();
-                        onClose();
-                    }}
-                    className="
-                        w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest
-                        transition-all duration-200 active:scale-[0.98] 
-                        shadow-lg flex items-center justify-center gap-2
-                        group
-                    "
-                    style={{
-                        background: theme.accent, 
-                        color: theme.buttonText, 
-                        boxShadow: `0 4px 15px -3px ${theme.accent}60`
-                    }}
-                >
-                    <i className="fi fi-rr-trash transition-transform group-hover:scale-110"></i>
-                    {t.buttons.remove}
-                </button>
+                {!autoRemoved && (
+                    <button 
+                        onClick={() => {
+                            onRemove();
+                            onClose();
+                        }}
+                        className="
+                            w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest
+                            transition-all duration-200 active:scale-[0.98] 
+                            shadow-lg flex items-center justify-center gap-2
+                            group
+                        "
+                        style={{
+                            background: theme.accent, 
+                            color: theme.buttonText, 
+                            boxShadow: `0 4px 15px -3px ${theme.accent}60`
+                        }}
+                    >
+                        <i className="fi fi-rr-trash transition-transform group-hover:scale-110"></i>
+                        {t.buttons.remove}
+                    </button>
+                )}
                 
                 {/* Keep Button - Soft Transparent */}
                 <button 
@@ -153,7 +155,7 @@ const WinnerModal: React.FC<WinnerModalProps> = ({ winner, onClose, onRemove, t,
                     "
                 >
                     <i className="fi fi-rr-check-circle transition-transform group-hover:scale-110"></i>
-                    {t.buttons.keep}
+                    {autoRemoved ? t.buttons.close : t.buttons.keep}
                 </button>
             </div>
         </div>
